@@ -1,0 +1,11 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-west2-docker.pkg.dev/stgml-training/fastapi-repo/fastapi-calculator:$SHORT_SHA",
+        "."
+      ]
+images:
+  - "us-west2-docker.pkg.dev/stgml-training/fastapi-repo/fastapi-calculator:$SHORT_SHA"
