@@ -23,8 +23,8 @@ def subtract(op: Operation):
 def multiply(op: Operation):
     return {"result": op.a * op.b}
 
-@app.post("/divide")
-def divide(op: Operation):
-    if op.b == 0:
-        return {"error": "Division by zero is not allowed"}
-    return {"result": op.a / op.b}
+# @app.post("/divide")
+# def divide(op: Operation):
+#     if op.b == 0:
+#         return {"error": "Division by zero is not allowed"}
+#     return {"result": op.a / op.b}
