@@ -1,11 +1,39 @@
 steps:
+  # Step 1: Build Docker image
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "-t",
-        "us-west2-docker.pkg.dev/stgml-training/fastapi-repo/fastapi-calculator:$SHORT_SHA",
+        "us-west2-docker.pkg.dev/stgml-training/quickstart-docker-repo/fastapi-calculator:$SHORT_SHA",
         "."
       ]
+
+  # Step 2: Push Docker image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-west2-docker.pkg.dev/stgml-training/quickstart-docker-repo/fastapi-calculator:$SHORT_SHA"
+      ]
+
+  # Step 3: Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "fastapi-calculator",
+        "--image",
+        "us-west2-docker.pkg.dev/stgml-training/quickstart-docker-repo/fastapi-calculator:$SHORT_SHA",
+        "--platform=managed",
+        "--region=us-west2",
+        "--allow-unauthenticated"
+      ]
+
 images:
-  - "us-west2-docker.pkg.dev/stgml-training/fastapi-repo/fastapi-calculator:$SHORT_SHA"
+  - "us-west2-docker.pkg.dev/stgml-training/quickstart-docker-repo/fastapi-calculator:$SHORT_SHA"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
