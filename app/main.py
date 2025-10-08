@@ -1,15 +1,12 @@
 from fastapi import FastAPI
+from functions_framework import create_app
 from pydantic import BaseModel
 
-app = FastAPI(title="Calculator API")
+app = FastAPI()
 
 class Operation(BaseModel):
     a: float
     b: float
-
-@app.get("/")
-def root():
-    return {"message": "Welcome to the Calculator API"}
 
 @app.post("/add")
 def add(op: Operation):
@@ -23,8 +20,6 @@ def subtract(op: Operation):
 def multiply(op: Operation):
     return {"result": op.a * op.b}
 
-# @app.post("/divide")
-# def divide(op: Operation):
-#     if op.b == 0:
-#         return {"error": "Division by zero is not allowed"}
-#     return {"result": op.a / op.b}
+# Cloud Functions entrypoint
+def fastapi_entrypoint(request):
+    return create_app(app)(request)
